@@ -1,0 +1,93 @@
+project: compound interest calculator
+"The initial focus for this project will be on investing and the power of compound interest. You will develop an application that allows users to see how their investments will grow over time."
+
+
+
+Function Display Home Screen
+    Declare initialInvestment as float default 0.0
+    Declare monthlyDeposit as float default 0.0
+    Declare annualRate as float default 0.0
+    Declare investmentYears as int default 0
+    Show "Welcome to the Compound Interest Calculator!"
+    Show "Please enter the following details to calculate your investment growth:"
+    
+    Show "-----------------------------------------------"
+    Show "Initial Investment Amount ($): initialInvestment"
+    Show "Monthly Deposit Amount ($): monthlyDeposit"
+    Show "Annual Interest Rate (%):  annualRate"
+    Show "Number of Years: investmentYears"
+    Show "-----------------------------------------------"  
+    Show "Press any key to calculate your investment growth, or 'q' to quit."
+    
+    Wait for user input
+
+    If user input is 'q' or 'Q'
+        Exit program
+    End If
+    
+    While initialInvestment < 0
+        Show "Initial Investment Amount must be a positive number. Please try again."
+        Input initialInvestment as float "Initial Investment Amount ($): "
+    End While
+    While monthlyDeposit < 0
+        Show "Monthly Deposit Amount must be a positive number. Please try again."
+        Input monthlyDeposit as float "Monthly Deposit Amount ($): "
+    End While
+    While annualRate < 0
+        Show "Annual Interest Rate must be a positive number. Please try again."
+        Input annualRate as float "Annual Interest Rate (%): "
+    End While
+    While investmentYears <= 0
+        Show "Number of Years must be a positive integer. Please try again."
+        Input investmentYears as int "Number of Years: "
+    End While
+
+    Call CalculateInvestmentGrowth(initialInvestment, monthlyDeposit, annualRate, investmentYears)
+    Call DisplayResults(initialInvestment, monthlyDeposit, annualRate, investmentYears)
+
+Function CalculateInvestmentGrowth(initialInvestment as float, monthlyDeposit as float, annualRate as float, investmentYears as int)
+
+    Set monthlyRate to (annualRate / 100) / 12
+    Set totalMonths to investmentYears * 12
+    Set balance to initialInvestment
+    Create list monthlyBalances
+
+    For month from 1 to totalMonths
+        Set balance to balance + monthlyDeposit
+        Set interest to balance * monthlyRate
+        Set balance to balance + interest
+        Append balance to monthlyBalances
+    End For
+
+    Return monthlyBalances  
+End Function
+
+Function DisplayResults(initialInvestment as float, monthlyDeposit as float, annualRate as float, investmentYears as int)
+
+    Set monthlyBalances to Call CalculateInvestmentGrowth(initialInvestment, monthlyDeposit, annualRate, investmentYears)
+    
+    Show "-----------------------------------------------"
+    Show "Investment Growth Over Time"
+    Show "-----------------------------------------------"
+    Show "Year | End Balance | Yearly Interest Earned"
+    Show "-----------------------------------------------"
+
+    Set previousBalance to initialInvestment
+
+    For year from 1 to investmentYears
+        Set endBalance to monthlyBalances[year * 12 - 1]
+        Set yearlyInterest to endBalance - previousBalance - (monthlyDeposit * 12)
+        Show year + " | $" + Format(endBalance, 2) + " | $" + Format(yearlyInterest, 2)
+        Set previousBalance to endBalance
+    End For
+
+    Show "-----------------------------------------------"
+    Show "Press any key to exit."
+    Wait for user input
+End Function    
+
+Start
+    Call Display Home Screen
+End Start
+
+End project
